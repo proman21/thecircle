@@ -10,6 +10,9 @@ services:
     volumes:
       - config:/config
       - /mnt/jellyfin-transcodes:/config/data/transcodes
+      - /mnt/media/movies:/media/movies
+      - /mnt/media/tv:/media/tv
+      - /mnt/media/music:/media/music
     group_add:
       - "993"
     devices:
