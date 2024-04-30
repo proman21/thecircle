@@ -17,6 +17,8 @@ services:
       - "993"
     devices:
       - /dev/dri/renderD128:/dev/dri/renderD128
+    networks:
+      - public
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.rule=Host(`tv.adamjacobus.dev`)"
@@ -25,3 +27,7 @@ services:
 
 volumes:
   config:
+
+networks:
+  public:
+    external: true
