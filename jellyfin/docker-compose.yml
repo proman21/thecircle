@@ -1,0 +1,24 @@
+name: jellyfin
+
+services:
+  server:
+    image: lscr.io/linuxserver/jellyfin:10.8.13
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - config:/config
+      - /mnt/jellyfin-transcodes:/config/data/transcodes
+    group_add:
+      - "993"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`tv.adamjacobus.dev`)"
+      - "traefik.http.routers.jellyfin.tls=true"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+
+volumes:
+  config:
