@@ -115,7 +115,6 @@ services:
 
   sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
     environment:
       - PUID=988
       - PGID=981
