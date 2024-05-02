@@ -7,12 +7,13 @@ services:
     ports:
       - 6081:6881
       - 6081:6881/udp
-      - 6011:6011   
+      - 6011:6011
+    env_file:
+      - stack.env
     environment:
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=openvpn
       - OPENVPN_USER=ncgKaeWGFNGLHNfpans13kTw
-      - OPENVPN_PASSWORD_SECRETFILE=/run/secrets/nordvpn_service_password
       - SERVER_COUNTRIES=Switzerland
       - SERVER_CATEGORIES=P2P
     restart: unless-stopped
