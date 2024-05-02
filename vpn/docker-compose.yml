@@ -1,13 +1,14 @@
 services:
   nordvpn:
     image: qmcgaw/gluetun:v3
-    container_name: nordvpn_tunnel
     cap_add:
       - NET_ADMIN
     ports:
       - 6081:6881
       - 6081:6881/udp
       - 6011:6011
+    networks:
+      - vpn_proxies
     env_file:
       - ../stack.env
     environment:
@@ -16,4 +17,10 @@ services:
       - OPENVPN_USER=ncgKaeWGFNGLHNfpans13kTw
       - SERVER_COUNTRIES=Switzerland
       - SERVER_CATEGORIES=P2P
+      - HTTPPROXY=on
+      - SHADOWSOCKS=on
     restart: unless-stopped
+
+networks:
+  vpn_proxies:
+    external: true
