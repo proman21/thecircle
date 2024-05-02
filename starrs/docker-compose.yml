@@ -1,0 +1,155 @@
+name: starrs
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    restart: unless-stopped
+    environment:
+      - PUID=993
+      - PGID=987
+      - UMASK=002
+    volumes:
+      - /etc/jellyfin:/config
+      - /mnt/jellyfin-transcodes:/config/data/transcodes
+      - /mnt/starrs/media:/data/media
+    group_add:
+      - "993"
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jellyfin.rule=Host(`tv.adamjacobus.dev`)"
+      - "traefik.http.routers.jellyfin.tls=true"
+      - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+
+  prowlarr:
+    image: linuxserverlscr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=990
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/prowlarr:/config
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.adamjacobus.dev`)"
+      - "traefik.http.routers.prowlarr.tls=true"
+      - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+    restart: unless-stopped
+    
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    environment:
+      - PUID=996
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/radarr:/config
+      - /mnt/starrs:/data
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.adamjacobus.dev`)"
+      - "traefik.http.routers.radarr.tls=true"
+      - "traefik.http.services.radarr.loadbalancer.server.port=7878"
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=999
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/sonarr:/config
+      - /mnt/starrs:/data
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sonarr.rule=Host(`sonarr.adamjacobus.dev`)"
+      - "traefik.http.routers.sonarr.tls=true"
+      - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+    restart: unless-stopped
+  
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    environment:
+      - PUID=995
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/lidarr:/config
+      - /mnt/starrs:/data
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.lidarr.rule=Host(`lidarr.adamjacobus.dev`)"
+      - "traefik.http.routers.lidarr.tls=true"
+      - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
+    restart: unless-stopped
+
+  readarr:
+    image: lscr.io/linuxserver/readarr:latest
+    environment:
+      - PUID=994
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/readarr:/config
+      - /mnt/starrs:/data
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.readarr.rule=Host(`readarr.adamjacobus.dev`)"
+      - "traefik.http.routers.readarr.tls=true"
+      - "traefik.http.services.readarr.loadbalancer.server.port=8686"
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    environment:
+      - PUID=987
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/bazarr:/config
+      - /mnt/starrs/media:/data/media
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.bazarr.rule=Host(`bazarr.adamjacobus.dev`)"
+      - "traefik.http.routers.bazarr.tls=true"
+      - "traefik.http.services.bazarr.loadbalancer.server.port=6767"
+    restart: unless-stopped
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=988
+      - PGID=981
+      - UMASK=002
+    volumes:
+      - /etc/sabnzbd:/config
+      - /mnt/starrs/usenet:/data/usenet
+    networks:
+      - public
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.sabnzbd.rule=Host(`sabnzbd.adamjacobus.dev`)"
+      - "traefik.http.routers.sabnzbd.tls=true"
+      - "traefik.http.services.sabnzbd.loadbalancer.server.port=8080"
+    restart: unless-stopped
+
+networks:
+  public:
+    external: true
