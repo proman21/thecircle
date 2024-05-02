@@ -9,7 +9,7 @@ services:
       - 6081:6881/udp
       - 6011:6011
     env_file:
-      - stack.env
+      - ../stack.env
     environment:
       - VPN_SERVICE_PROVIDER=nordvpn
       - VPN_TYPE=openvpn
