@@ -131,6 +131,28 @@ services:
       - "traefik.http.services.sabnzbd.loadbalancer.server.port=8080"
     restart: unless-stopped
 
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    environment:
+      - PUID=986
+      - PGID=987
+      - UMASK=002
+    volumes:
+      - /etc/qbittorrent:/config
+      - /mnt/starrs/torrents:/data/torrents
+    networks:
+      - public
+      - vpn_proxies
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.adamjacobus.dev`)"
+      - "traefik.http.routers.qbittorrent.tls=true"
+      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+    restart: unless-stopped
+
 networks:
   public:
     external: true
+  vpn_proxies:
+    external: true
+  
