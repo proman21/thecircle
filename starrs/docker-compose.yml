@@ -95,24 +95,6 @@ services:
       - "traefik.http.services.lidarr.loadbalancer.server.port=8686"
     restart: unless-stopped
 
-  readarr:
-    image: lscr.io/linuxserver/readarr:latest
-    environment:
-      - PUID=994
-      - PGID=981
-      - UMASK=002
-    volumes:
-      - /etc/readarr:/config
-      - /mnt/starrs:/data
-    networks:
-      - public
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.readarr.rule=Host(`readarr.adamjacobus.dev`)"
-      - "traefik.http.routers.readarr.tls=true"
-      - "traefik.http.services.readarr.loadbalancer.server.port=8686"
-    restart: unless-stopped
-
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
     environment:
