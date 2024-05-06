@@ -133,7 +133,7 @@ services:
 
   jellyseerr:
     image: fallenbagel/jellyseerr:latest
-    user: jellyseerr
+    user: '985'
     environment:
       - LOG_LEVEL=debug
     networks:
