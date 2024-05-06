@@ -131,23 +131,20 @@ services:
       - "traefik.http.services.sabnzbd.loadbalancer.server.port=8080"
     restart: unless-stopped
 
-  qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    user: jellyseerr
     environment:
-      - PUID=986
-      - PGID=987
-      - UMASK=002
-    volumes:
-      - /etc/qbittorrent:/config
-      - /mnt/starrs/torrents:/data/torrents
+      - LOG_LEVEL=debug
     networks:
       - public
-      - vpn_proxies
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.qbittorrent.rule=Host(`qbittorrent.adamjacobus.dev`)"
-      - "traefik.http.routers.qbittorrent.tls=true"
-      - "traefik.http.services.qbittorrent.loadbalancer.server.port=8080"
+      - traefik.enable=true
+      - traefik.http.routers.jellyseerr.rule=Host(`epg.adamjacobus.dev`)
+      - traefik.http.routers.jellyseerr.tls=true
+      - traefik.http.services.jellyseerr.loadbalancer.server.port=5055
+    volumes:
+      - /etc/jellyseerr:/app/config
     restart: unless-stopped
 
 networks:
