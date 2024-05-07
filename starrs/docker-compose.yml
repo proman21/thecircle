@@ -144,9 +144,9 @@ services:
       - traefik.http.routers.jellyseerr.tls=true
       - traefik.http.services.jellyseerr.loadbalancer.server.port=5055
       - traefik.http.middlewares.jellyseerr-stripprefix.stripprefix.prefixes=/jellyseerr
-      - traefik.http.middlewares.jellyseerr-rewriterelativelocation.plugin.traefik-plugin-rewrite-response-headers.rewrites.header=Location
-      - traefik.http.middlewares.jellyseerr-rewriterelativelocation.plugin.traefik-plugin-rewrite-response-headers.rewrites.regex=^/(.+)$
-      - traefik.http.middlewares.jellyseerr-rewriterelativelocation.plugin.traefik-plugin-rewrite-response-headers.rewrites.replacement=/jellyseerr/$1
+      - traefik.http.middlewares.jellyseerr-rewriterelativelocation.plugin.traefik-plugin-rewrite-response-headers.rewrites[0].header=Location
+      - traefik.http.middlewares.jellyseerr-rewriterelativelocation.plugin.traefik-plugin-rewrite-response-headers.rewrites[0].regex=^/(.+)$
+      - traefik.http.middlewares.jellyseerr-rewriterelativelocation.plugin.traefik-plugin-rewrite-response-headers.rewrites[0].replacement=/jellyseerr/$1
 
       - traefik.http.middlewares.jellyseerr-rewritebody.plugin.rewrite-body.rewrites[0].regex=href=\"/(.+?)?\"
       - traefik.http.middlewares.jellyseerr-rewritebody.plugin.rewrite-body.rewrites[0].replacement=href=\"/jellyseerr/$1\"
