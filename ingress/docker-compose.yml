@@ -1,0 +1,50 @@
+services:
+  traefik:
+    image: "traefik:2.11"
+    command:
+      - --api.dashboard=true
+      - --entrypoints.websecure.address=:443
+      - --providers.docker.exposedByDefault=false
+      - --providers.docker.network=public
+      - --providers.docker.allowEmptyServices=true
+      - --providers.file.filename=/traefik_certs.yml
+      - --log.level=debug
+      - --log.format=json
+      - --accesslog=true
+      - --accesslog.format=json
+      - --accesslog.fields.names.RequestHost=keep
+      - --accesslog.fields.names.RouterName=keep
+    networks:
+      - public
+      - default
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+    configs:
+      - traefik_certs.yml
+    secrets:
+      - cloudflare_origin_cert
+      - cloudflare_origin_key
+
+  cloudflared:
+    image: "cloudflare/cloudflared:latest"
+    command: tunnel --no-autoupdate run
+    restart: unless-stopped
+    environment:
+      - TUNNEL_TOKEN=eyJhIjoiYThlMjFmZjJkNWZmZjVlYzBjNGNkZWI1NDcyMTIzZDAiLCJ0IjoiNDU1ZjhhYTAtYjRhZC00NDExLThmNzgtNmE4YTYxNzhmNWRmIiwicyI6IlpqSTVPRE15TkdZdE5XRTNZUzAwTlRCaUxUZzNaREF0WkRObVkySmpNRGd6TlRjMiJ9
+    networks:
+      - default
+
+networks:
+  public:
+    external: true
+
+configs:
+  traefik_certs.yml:
+    file: certs.yml
+
+secrets:
+  cloudflare_origin_key:
+    environment: CLOUDFLARE_ORIGIN_KEY
+  cloudflare_origin_cert:
+    environment: CLOUDFLARE_ORIGIN_CERT
