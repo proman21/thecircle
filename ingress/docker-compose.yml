@@ -28,6 +28,8 @@ services:
     image: "cloudflare/cloudflared:latest"
     command: tunnel --no-autoupdate run
     restart: unless-stopped
+    env_file:
+      - ../stack.env
     networks:
       - default
 
@@ -38,9 +40,3 @@ networks:
 configs:
   traefik_certs.yml:
     file: certs.yml
-
-secrets:
-  cloudflare_origin_key:
-    environment: CLOUDFLARE_ORIGIN_KEY
-  cloudflare_origin_cert:
-    environment: CLOUDFLARE_ORIGIN_CERT
