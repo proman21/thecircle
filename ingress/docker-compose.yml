@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: "traefik:2.11"
+    image: traefik:2.11
     command:
       - --api.dashboard=true
       - --entrypoints.websecure.address=:443
@@ -18,22 +18,16 @@ services:
       - public
       - default
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/caddy/ssl:/ssl:ro
     restart: unless-stopped
-    env_file:
-      - ../stack.env
     configs:
       - traefik_certs.yml
-    secrets:
-      - cloudflare_origin_cert
-      - cloudflare_origin_key
 
   cloudflared:
     image: "cloudflare/cloudflared:latest"
     command: tunnel --no-autoupdate run
     restart: unless-stopped
-    environment:
-      - TUNNEL_TOKEN=eyJhIjoiYThlMjFmZjJkNWZmZjVlYzBjNGNkZWI1NDcyMTIzZDAiLCJ0IjoiNDU1ZjhhYTAtYjRhZC00NDExLThmNzgtNmE4YTYxNzhmNWRmIiwicyI6IlpqSTVPRE15TkdZdE5XRTNZUzAwTlRCaUxUZzNaREF0WkRObVkySmpNRGd6TlRjMiJ9
     networks:
       - default
 
